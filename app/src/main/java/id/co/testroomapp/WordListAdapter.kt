@@ -46,14 +46,14 @@ class WordListAdapter internal constructor(
         holder.cvParent.setOnClickListener {
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Update")
-            builder.setMessage("Update Kata?")
-            builder.setPositiveButton("YA") { _, _ ->
+            builder.setMessage("Update Word?")
+            builder.setPositiveButton("YES") { _, _ ->
                 val intent = Intent(this.context, NewWordActivity::class.java)
                 intent.putExtra("word", current as Serializable)
 
                 (context as Activity).startActivityForResult(intent, updateCode)
             }
-            builder .setNegativeButton("Tidak") { _, _ ->
+            builder .setNegativeButton("NO") { _, _ ->
 
             }
             val dialog: AlertDialog = builder.create()
@@ -63,8 +63,19 @@ class WordListAdapter internal constructor(
         }
 
         holder.cvParent.setOnLongClickListener {
-            Toast.makeText(context, "deleted", Toast.LENGTH_LONG).show()
-            WordViewModel(Singleton()).delete(current)
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("DELETE")
+            builder.setMessage("DELETE Word?")
+            builder.setPositiveButton("YES") { _, _ ->
+                Toast.makeText(context, "deleted", Toast.LENGTH_LONG).show()
+                WordViewModel(Singleton()).delete(current)
+            }
+            builder .setNegativeButton("NO") { _, _ ->
+
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+
             true
         }
 
