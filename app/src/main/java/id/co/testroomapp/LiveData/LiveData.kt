@@ -19,7 +19,7 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.insert(word)
     }
     fun delete(word: Word){
-        wordDao.deleteWord(word.word)
+        wordDao.deleteWord(word)
     }
     fun update(word: Word){
         wordDao.updateWord(word)

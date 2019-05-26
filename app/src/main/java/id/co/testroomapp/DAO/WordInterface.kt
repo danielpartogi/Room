@@ -2,10 +2,7 @@ package id.co.testroomapp.DAO
 
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import id.co.testroomapp.Entity.Word
 
 @Dao
@@ -23,8 +20,8 @@ interface WordDao {
     @Query("DELETE FROM word_table")
     fun deleteAll()
 
-    @Query("DELETE FROM word_table WHERE word = :word")
-    fun deleteWord(word:String)
+    @Delete
+    fun deleteWord(word:Word)
 
     @Update
     fun updateWord(word:Word)
