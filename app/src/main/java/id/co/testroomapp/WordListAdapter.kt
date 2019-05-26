@@ -44,11 +44,6 @@ class WordListAdapter internal constructor(
         val current = words[position]
         holder.wordItemView.text = current.word
         holder.cvParent.setOnClickListener {
-            Toast.makeText(context, "deleted", Toast.LENGTH_LONG).show()
-            WordViewModel(Singleton()).delete(current)
-        }
-
-        holder.cvParent.setOnLongClickListener {
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Update")
             builder.setMessage("Update Kata?")
@@ -63,6 +58,13 @@ class WordListAdapter internal constructor(
             }
             val dialog: AlertDialog = builder.create()
             dialog.show()
+
+
+        }
+
+        holder.cvParent.setOnLongClickListener {
+            Toast.makeText(context, "deleted", Toast.LENGTH_LONG).show()
+            WordViewModel(Singleton()).delete(current)
             true
         }
 
