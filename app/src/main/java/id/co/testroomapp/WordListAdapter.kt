@@ -19,6 +19,9 @@ import id.co.testroomapp.Entity.Word
 import id.co.testroomapp.LiveData.WordViewModel
 import android.app.Activity
 import java.io.Serializable
+import java.nio.file.Files.size
+
+
 
 
 class WordListAdapter internal constructor(
@@ -26,7 +29,7 @@ class WordListAdapter internal constructor(
 ) : RecyclerView.Adapter<WordListAdapter.WordViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var words = emptyList<Word>() // Cached copy of words
+    private var words = emptyList<Word>().toMutableList() // Cached copy of words
 
     class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -40,6 +43,17 @@ class WordListAdapter internal constructor(
         return WordViewHolder(itemView)
     }
 
+    fun removeItem(position: Int) {
+        words.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, words.size)
+    }
+
+
+    fun restoreItem(model: Word, position: Int) {
+        words.add(position, model)
+        notifyItemInserted(position)
+    }
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val current = words[position]
         holder.wordItemView.text = current.word
@@ -89,7 +103,7 @@ class WordListAdapter internal constructor(
 
 
     internal fun setWords(words: List<Word>) {
-        this.words = words
+        this.words = words.toMutableList()
         notifyDataSetChanged()
     }
 
