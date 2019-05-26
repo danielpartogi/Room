@@ -12,50 +12,46 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.room.Update
 import id.co.testroomapp.Entity.Word
 import id.co.testroomapp.LiveData.WordViewModel
+import id.co.testroomapp.WordListAdapter.Companion.updateCode
 import java.util.*
 
 class NewWordActivity : AppCompatActivity() {
 
     private lateinit var editWordView: EditText
     private lateinit var  word:String
-    private lateinit var  wordId:String
+    private lateinit var  wordModel:Word
 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_word)
 
-        var update = false
         editWordView = findViewById(R.id.edit_word)
-        if(intent.hasExtra("Word"))
-        {
-            word = intent.getStringExtra("Word")
-        }
-        if(intent.hasExtra("updateWord"))
-        {
-            update = intent.getBooleanExtra("updateWord", false)
-            wordId = intent.getStringExtra("wordId")
-        }
-        if(update){
-            editWordView.setText(word)
-        }
 
+        if(intent.hasExtra("word")){
+            wordModel = intent?.extras?.get("word") as Word
+            editWordView.setText(wordModel.word)
+        }
 
         val button = findViewById<Button>(R.id.button_save)
         button.setOnClickListener {
             val replyIntent = Intent()
-            if (TextUtils.isEmpty(editWordView.text)) {
-                setResult(Activity.RESULT_CANCELED, replyIntent)
-            } else {
-                val word = editWordView.text.toString()
-                if(update){
-                    val wordViewModel = ViewModelProviders.of(this).get(WordViewModel::class.java)
-                        wordViewModel.update(wordId,word)
+            word = editWordView.text.toString()
+
+            when {
+                TextUtils.isEmpty(editWordView.text) -> {
+
                 }
-                else{
+                intent.hasExtra("word") -> {
+                    wordModel.word = word
+                    replyIntent.putExtra(EXTRA_UPDATE, wordModel)
+                    setResult(Activity.RESULT_OK, replyIntent)
+                }
+                else -> {
                     replyIntent.putExtra(EXTRA_REPLY, word)
+        //
+                    setResult(Activity.RESULT_OK, replyIntent)
                 }
-                setResult(Activity.RESULT_OK, replyIntent)
             }
             finish()
         }
@@ -63,5 +59,6 @@ class NewWordActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_REPLY = "com.example.android.wordlistsql.REPLY"
+        const val EXTRA_UPDATE = "UPDATE"
     }
 }

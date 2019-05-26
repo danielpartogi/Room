@@ -24,12 +24,13 @@ import id.co.testroomapp.DAO.WordDao
 import id.co.testroomapp.Database.WordRoomDatabase
 import id.co.testroomapp.Entity.Word
 import id.co.testroomapp.LiveData.WordViewModel
+import id.co.testroomapp.WordListAdapter.Companion.updateCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     private lateinit var wordViewModel: WordViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +66,11 @@ class MainActivity : AppCompatActivity() {
             data?.let {
                 val word = Word(UUID.randomUUID().toString(),it.getStringExtra(NewWordActivity.EXTRA_REPLY))
                 wordViewModel.insert(word)
+            }
+        }
+        else if (requestCode == updateCode && resultCode == Activity.RESULT_OK) {
+            data?.let {
+                wordViewModel.update(it.extras?.get(NewWordActivity.EXTRA_UPDATE) as Word)
             }
         }
     }

@@ -18,18 +18,15 @@ class WordRepository(private val wordDao: WordDao) {
     fun insert(word: Word) {
         wordDao.insert(word)
     }
-    @WorkerThread
     fun delete(word: Word){
         wordDao.deleteWord(word.word)
     }
-    @WorkerThread
-    fun update(wordId: String, word:String){
-        wordDao.updateWord(wordId, word)
+    fun update(word: Word){
+        wordDao.updateWord(word)
     }
 }
 
 class WordViewModel(application: Application) : AndroidViewModel(application){
-
 
     private val repository: WordRepository
     val allWords: LiveData<List<Word>>
@@ -40,8 +37,8 @@ class WordViewModel(application: Application) : AndroidViewModel(application){
         allWords = repository.allWords
     }
 
-    fun update(wordId: String, word:String) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(wordId, word)
+    fun update(word: Word) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(word)
     }
 
     fun insert(word: Word) = viewModelScope.launch(Dispatchers.IO) {

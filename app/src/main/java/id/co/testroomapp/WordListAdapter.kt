@@ -17,6 +17,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import id.co.testroomapp.Entity.Word
 import id.co.testroomapp.LiveData.WordViewModel
+import android.app.Activity
+import java.io.Serializable
 
 
 class WordListAdapter internal constructor(
@@ -30,12 +32,7 @@ class WordListAdapter internal constructor(
 
         val wordItemView: TextView = itemView.findViewById(R.id.textView)
         val cvParent: CardView = itemView.findViewById(R.id.cv_parent)
-//        fun bind(word: Word){
-//
-//            itemView.setOnClickListener {
-//                wordViewModel.delete(word)
-//            }
-//        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -55,22 +52,26 @@ class WordListAdapter internal constructor(
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Update")
             builder.setMessage("Update Kata?")
-            builder.setPositiveButton("YA") { dialog, which ->
+            builder.setPositiveButton("YA") { _, _ ->
                 val intent = Intent(this.context, NewWordActivity::class.java)
-                intent.putExtra("updateWord", true)
-                intent.putExtra("Word", current.word)
-                intent.putExtra("wordId", current.wordId)
-                holder.cvParent.context.startActivity(intent)
+                intent.putExtra("word", current as Serializable)
+
+                (context as Activity).startActivityForResult(intent, updateCode)
             }
-            builder .setNegativeButton("Tidak") {  dialog, which ->
+            builder .setNegativeButton("Tidak") { _, _ ->
 
             }
             val dialog: AlertDialog = builder.create()
             dialog.show()
             true
         }
+
     }
 
+
+    companion object {
+        const val updateCode = 201
+    }
 
 
 
