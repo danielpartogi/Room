@@ -116,8 +116,11 @@ class MainActivity : AppCompatActivity(){
                     val intent = Intent(this@MainActivity, NewWordActivity::class.java)
                     val word = wordViewModel.allWords.value!![position]
                     intent.putExtra("word", word as Serializable)
+                    intent.putExtra("position", position)
 
                     startActivityForResult(intent, updateCode)
+                    adapter!!.removeItem(position)
+                    adapter!!.restoreItem(word, position)
                 }
 
             }
